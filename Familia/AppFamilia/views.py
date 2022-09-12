@@ -1,12 +1,24 @@
 from django.shortcuts import render
-from AppFamilia.models import Familiares
+from AppFamilia.models import *
 from django.http import HttpResponse
-# Create your views here.
+from AppFamilia.Templates import*
+from django.template import Template, Context, loader
 
-def Familia(request):
+#Create your views here.
 
-    familiar = Familiares(nombre="Ismael", apellido = "Magris", edad =9, proximo_cumpleaños = "2023-08-15")
+def Familia(request):#Agregar Familiares
 
+    familiar = Familiares(nombre="Ismael", apellido = "Magris", edad =9, proximo_cumpleaños = "2023-08-15")     
+    
     familiar.save()
 
     return HttpResponse(f"Estoy guardando a mis familiares {familiar.nombre}")
+
+
+
+def ver_Familiares(request):
+    queryset = Familiares.objects.all()
+    diccionario = {"Familiares":queryset}
+    plantilla = loader.get_template("AppFamilia/Familiares.html")
+    documento_html = plantilla.render(diccionario)
+    return HttpResponse(documento_html)
